@@ -1,0 +1,22 @@
+# Template file for 'claws-mail'
+pkgname=claws-mail
+version=3.11.1
+revision=1
+build_style=gnu-configure
+hostmakedepends="pkg-config libetpan-devel"
+makedepends="gtk+-devel gpgme-devel gnutls-devel enchant-devel dbus-devel libetpan-devel"
+short_desc="An extensible and secure e-mail client / newsreader with classic GUI"
+maintainer="Jakub Skrzypnik <jot.skrzyp@gmail.com>"
+license="GPL-3"
+homepage="http://claws-mail.org"
+distfiles="${SOURCEFORGE_SITE}/claws-mail/Claws%20Mail/${version}/claws-mail-${version}.tar.gz"
+checksum="eb9a9a18bc3ad4f6c5a1689e74522a2ef98437a010f49a669082ba64b7f5fc34"
+
+claws-mail-devel_package() {
+	depends="${makedepends}"
+	short_desc+=" - development files"
+	pkg_install() {
+		vmove usr/include
+		vmove usr/lib/pkgconfig
+	}
+}
