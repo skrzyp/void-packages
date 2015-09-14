@@ -1,0 +1,18 @@
+pkgname=wordgrinder
+version=0.5.2.1
+revision=1
+short_desc="A word processor which lets you get some work done"
+homepage="https://github.com/davidgiven/wordgrinder"
+license="MIT"
+distfiles="https://github.com/davidgiven/wordgrinder/archive/wordgrinder-${version}.tar.gz"
+wrksrc="${pkgname}-${pkgname}-${version}"
+checksum="7b5c1c3c22c05a7fa4a642578294f138a61fecb983a5a4201a7e905b2fbd6c0c"
+makedepends="ncurses-devel zlib-devel lua-devel libXft-devel lua luafilesystem"
+do_build() {
+	[[ $XBPS_TARGET_MACHINE == *-musl ]] && sed -i '1i #include <sys/types.h>' ${wrksrc}/src/c/arch/unix/cursesw/dpy.c
+	make ${makejobs} LUA_INCLUDE=${XBPS_CROSS_BASE}/include/ LUA_LIB=-llua cc=$CC
+}
+do_install() {
+	make install PREFIX=${DESTDIR}/usr
+	vlicense COPYING
+}
