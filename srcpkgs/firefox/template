@@ -1,7 +1,7 @@
 # Template build file for 'firefox'.
 pkgname=firefox
 version=42.0
-revision=1
+revision=2
 short_desc="Lightweight gecko-based web browser"
 maintainer="Juan RP <xtraeme@voidlinux.eu>"
 homepage="https://www.mozilla.org/firefox/"
@@ -13,11 +13,11 @@ lib32disabled=yes
 
 hostmakedepends="unzip zip pkg-config perl python yasm"
 makedepends="nss-devel libjpeg-turbo-devel libpng-devel
- icu55-devel pixman-devel sqlite-devel gst-plugins-base1-devel gtk+-devel
+ icu55-devel pixman-devel sqlite-devel gst-plugins-base1-devel gtk+3-devel
  libevent-devel libnotify-devel libvpx-devel libXrender-devel
  startup-notification-devel dbus-glib-devel alsa-lib-devel pulseaudio-devel
  hunspell-devel libXcomposite-devel libSM-devel libXScrnSaver-devel
- libXt-devel libXdamage-devel"
+ libXt-devel libXdamage-devel gtk+-devel"
 depends="nss>=3.20.1 desktop-file-utils hicolor-icon-theme"
 conflicts="firefox-esr>=0"
 
@@ -96,7 +96,8 @@ do_configure() {
 		--with-google-api-keyfile="${wrksrc}/google-api-key" \
 		--enable-optimize="$CFLAGS" --disable-strip --disable-install-strip \
 		--disable-static --enable-pie \
-		--disable-profiling --disable-profilelocking
+		--disable-profiling --disable-profilelocking \
+		--enable-default-toolkit=cairo-gtk3 --enable-extensions=default,-gnomevfs
 }
 do_build() {
 	cd xbps-build
