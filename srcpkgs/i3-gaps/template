@@ -1,16 +1,22 @@
 # Template file for 'i3-gaps'
 pkgname=i3-gaps
-version=4.11
-revision=2
+if [ "build_option_git" ]; then
+	version=git1
+else
+	version=4.11
+fi
+revision=1
 build_style=gnu-makefile
 hostmakedepends="pkg-config perl git"
 makedepends="pcre-devel yajl-devel libxcb-devel libev-devel
  pango-devel startup-notification-devel libxkbcommon-devel
  xcb-util-keysyms-devel xcb-util-wm-devel xcb-util-cursor-devel"
-short_desc="Improved tiling window manager - i3 fork with more features"
+short_desc="Improved tiling window manager - gaps branch with additional features"
 maintainer="ian c. <ian@airmail.cc>"
 license="BSD"
 homepage="https://github.com/Airblader/i3"
+build_options="git"
+desc_option_git="use gaps-next git repo instead of stable gaps branch"
 
 provides="i3-${version}_${revision}"
 replaces="i3>=0"
@@ -23,8 +29,16 @@ do_fetch() {
 	local url="git://github.com/Airblader/i3.git"
 	msg_normal "Fetching source from $url ...\n"
 	git clone ${url} ${pkgname}-${version}
-	cd ${pkgname}-${version} ; git checkout gaps ; git pull ; cd ..
+	cd ${pkgname}-${version}
+	if [ "$build_option_git" ] ; then
+		git checkout gaps-next
+	else
+		git checkout gaps
+	fi
+	git pull
+	cd ..
 }
+
 pre_build() {
 	case "$XBPS_TARGET_MACHINE" in
 		*-musl)
@@ -35,7 +49,5 @@ pre_build() {
 		;;
 	esac
 }
-post_install() {
-	rm -rf ${DESTDIR}/usr/include
-	vlicense LICENSE
-}
+
+post_install() { vlicense LICENSE; }
